@@ -19,21 +19,21 @@ void setup() {
 }
 
 void loop() {
-  double mq2_sum = 0;
-  double mq3_sum = 0;  
-  double mq7_sum = 0;
-  double mq135_sum = 0;
-  double temperature_sum = 0;  
+  float mq2_sum = 0;
+  float mq3_sum = 0;
+  float mq7_sum = 0;
+  float mq135_sum = 0;
+  float temperature_sum = 0;
 
   for (int i = 0; i < samples; i++ ) {
     mq2_sum += analogRead(MQ2_PIN);
     mq3_sum += analogRead(MQ3_PIN);
     mq7_sum += analogRead(MQ7_PIN);
     mq135_sum += analogRead(MQ135_PIN);
-    temperature_sum += analogRead(TEMPERATURE_PIN);    
+    temperature_sum += convert_temperature(analogRead(TEMPERATURE_PIN));
     delay(10000); // get data every 10 sec
   }
-  
+
 //  Serial.print("CO: ");
   Serial.print(mq2_sum/samples);
   Serial.print(",");
@@ -45,9 +45,14 @@ void loop() {
   Serial.print(",");
 //  Serial.print(" AQ: ");
   Serial.print(mq135_sum/samples);
-  Serial.print(",");  
+  Serial.print(",");
 //  Serial.print(" Temp: ");
-  Serial.print(temperature_sum/samples);  
+  Serial.print(temperature_sum/samples);
   Serial.println();
 }
 
+float convert_temperature(float analog_val) {
+  float voltage = (analog_val / 1024.0) * 5.0;
+  float temperature = (voltage - 0.5) * 100.0;
+  return temperature;
+}

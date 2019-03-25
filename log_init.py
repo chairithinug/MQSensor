@@ -17,20 +17,20 @@ def MQ_data():
         pass
         
     decoded_line = str(line[0:len(line)-2].decode("utf-8"))
-    mq2, mq3, mq7, mq135 = decoded_line.split(',')
-    return mq2, mq3, mq7, mq135
+    mq2, mq3, mq7, mq135, temp = decoded_line.split(',')
+    return mq2, mq3, mq7, mq135, temp
 
 def Thingspeak_post():
-    mq2, mq3, mq7, mq135 = MQ_data()
+    mq2, mq3, mq7, mq135, temp = MQ_data()
     # Send to Thingspeak
-    conn = urllib.request.urlopen(Thingspeak_url+'&field1=%s&field2=%s&field3=%s&field4=%s' % (mq2, mq3, mq7, mq135))
+    conn = urllib.request.urlopen(Thingspeak_url+'&field1=%s&field2=%s&field3=%s&field4=%s&field5=%s' % (mq2, mq3, mq7, mq135, temp))
     print(conn.read())
     conn.close()
     return
 
 # main forever loop
 while True:
-    # try:
+    try:
         Thingspeak_post()
-    # except:
-        # break
+    except:
+        pass
